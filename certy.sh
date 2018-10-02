@@ -1,15 +1,13 @@
 #!/bin/bash
 
-# Parse CSR input to produce string used to generate CSR
-# Inputs: text from pasteboard
-# Output: command with arguments
-#
+echo "Please paste in the combined list of CSR details provided by the customer."
+a=""
 
-echo 'Paste the CSR details provided by the customer';
-read CSR_details;
+while read line
+do
+ a+="$line "
+done < "${1:-/dev/stdin}"
+# echo "pan site_certs.get_csr:"${a//$'\n'/}
+a=${a// /,}
+echo "pan site_certs.get_csr:"$a
 
-
-# Clean data 
-# Remove any superfluous chars
-# Escape any args w/ a comma
-# Wrap each arg in quotes
