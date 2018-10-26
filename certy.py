@@ -13,8 +13,6 @@ def multi_input():
         return
 
 customer_input = list(multi_input())
-#customer_input = str(customer_input)
-#customer_input = "pan site_certs.get_csr " + customer_input.replace('#','')
 
 def create_command(customer_details): 
     command = ''
@@ -24,35 +22,43 @@ def create_command(customer_details):
         customer_details[detail] = customer_details[detail].replace(',','\,')
         customer_details[detail] = customer_details[detail].strip()
         customer_details[detail] = common_name(customer_details[detail])
-        command += customer_details[detail]
+        customer_details[detail] = dns_names(customer_details[detail])
+        command += customer_details[detail] + ','
     return command
 
 def common_name(detail):
     if "common name" in detail.lower():
         detail = detail.lower().replace("common name","common_name")
+        detail = detail.replace(":","=")
         detail = detail.replace(" ","")
-    return detail + ","
+    return detail
 
+ # DNS names: some-site.example.com, some-other-sub.example.com
 def dns_names(detail):
-    return detail + ","
+    if "dns names" in detail.lower():
+        detail = detail.lower().replace("dns names","dns_names")
+        detail = detail.replace(":","=")
+        detail = detail.replace(",",":")
+        detail = detail.replace(" ","")
+    return detail
 
 def emails(detail):
-    return detail + ","
+    return detail
 
 def org(detail):
-    return detail + ","
+    return detail
 
 def org_unit(detail):
-    return detail + ","
+    return detail
 
 def country(detail):
-    return detail + ","
+    return detail
 
 def locality(detail):
-    return detail + ","
+    return detail
 
 def province(detail):
-    return detail + ","
+    return detail
 
 print("pan site_certs.get_csr:" + create_command(customer_input))
 
